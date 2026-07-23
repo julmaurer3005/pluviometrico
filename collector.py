@@ -159,11 +159,11 @@ def run_sync(past_days=30, fonte='open-meteo'):
             time.sleep(0.5)  # Pequeno delay para evitar Rate Limit (HTTP 429) no Open-Meteo
                 
     elif fonte == 'openweathermap':
-        api_key = get_env_var("OPENWEATHERMAP_API_KEY")
+        api_key = get_env_var("OPENWEATHERMAP_API_KEY") or get_env_var("OPENWEATHER_API_KEY")
         if not api_key:
             raise ValueError(
-                "A chave de API da OpenWeatherMap não foi encontrada no arquivo .env! "
-                "Crie o arquivo contendo: OPENWEATHERMAP_API_KEY=sua_chave_aqui"
+                "A chave de API da OpenWeatherMap não foi encontrada! "
+                "Configure a variável de ambiente OPENWEATHERMAP_API_KEY ou OPENWEATHER_API_KEY."
             )
             
         for city in CIDADES:

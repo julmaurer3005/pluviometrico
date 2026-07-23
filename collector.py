@@ -1,6 +1,7 @@
 import requests
 import sys
 import os
+import time
 from datetime import datetime, timezone, timedelta
 import database
 
@@ -155,6 +156,7 @@ def run_sync(past_days=30, fonte='open-meteo'):
             if count > 0:
                 success_cities += 1
                 total_records += count
+            time.sleep(0.5)  # Pequeno delay para evitar Rate Limit (HTTP 429) no Open-Meteo
                 
     elif fonte == 'openweathermap':
         api_key = get_env_var("OPENWEATHERMAP_API_KEY")

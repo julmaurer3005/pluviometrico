@@ -31,14 +31,18 @@ def fetch_precipitation_for_city_meteo(city, past_days=30):
         "past_days": past_days
     }
     
+    headers = {
+        "User-Agent": "PluviometricoApp/1.0 (https://github.com/julmaurer3005/pluviometrico)"
+    }
+    
     try:
-        print(f"[*] [Open-Meteo] Consultando {city['nome']} (IBGE: {city['ibge']})...")
-        response = requests.get(url, params=params, timeout=10)
+        print(f"[*] [Open-Meteo] Consultando {city['nome']} (IBGE: {city['ibge']})...", flush=True)
+        response = requests.get(url, params=params, headers=headers, timeout=15)
         response.raise_for_status()
         
         data = response.json()
         if "daily" not in data or "time" not in data["daily"] or "precipitation_sum" not in data["daily"]:
-            print(f"[!] Erro: Resposta inválida da Open-Meteo para {city['nome']}.")
+            print(f"[!] Erro: Resposta inválida da Open-Meteo para {city['nome']}.", flush=True)
             return 0
             
         times = data["daily"]["time"]
@@ -60,11 +64,11 @@ def fetch_precipitation_for_city_meteo(city, past_days=30):
             )
             saved_count += 1
             
-        print(f"[+] [Open-Meteo] Sucesso: {saved_count} registros diários salvos para {city['nome']}.")
+        print(f"[+] [Open-Meteo] Sucesso: {saved_count} registros diários salvos para {city['nome']}.", flush=True)
         return saved_count
         
     except requests.exceptions.RequestException as e:
-        print(f"[!] Erro ao consultar Open-Meteo para {city['nome']}: {e}", file=sys.stderr)
+        print(f"[!] Erro ao consultar Open-Meteo para {city['nome']}: {e}", file=sys.stderr, flush=True)
         return 0
 
 def fetch_precipitation_for_city_owm(city, api_key):
